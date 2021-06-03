@@ -16,6 +16,5 @@ RSpec.describe Spacecraft do
 
     expect(daedalus.name).to eq('Daedalus')
     expect(daedalus.fuel).to eq(400)
-
-
+  end 
 end
