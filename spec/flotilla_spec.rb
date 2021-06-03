@@ -2,7 +2,7 @@ require './lib/spacecraft'
 require './lib/person'
 require './lib/flotilla'
 
-Rspec.describ Flotilla do
+RSpec.describe Flotilla do
 
   it "exists" do
 
@@ -15,9 +15,9 @@ Rspec.describ Flotilla do
 
     seventh_flotilla = Flotilla.new({designation: 'Seventh Flotilla'})
 
-    expect(seventh_flotilla.name).to be_a('Seventh Flotilla')
-    expect(seventh_flotilla.personnel).to be_a([])
-    expect(seventh_flotilla.ships).to be_a([])
+    expect(seventh_flotilla.name).to eq('Seventh Flotilla')
+    expect(seventh_flotilla.personnel).to eq([])
+    expect(seventh_flotilla.ships).to eq([])
   end
 
   it "can add ships" do
@@ -116,6 +116,34 @@ Rspec.describ Flotilla do
     seventh_flotilla.add_personnel(rover)
     seventh_flotilla.add_personnel(sampson)
 
-    expect(seventh.flotilla.recommend_personnel(odyssey)).to eq([polly])
+    expect(seventh_flotilla.recommend_personnel(odyssey)).to eq([polly])
+  end
+
+  it "can group personnel by ship" do
+
+    odyssey = Spacecraft.new({name: 'Odyssey', fuel: 300})
+    kathy = Person.new('Kathy Chan', 10)
+    polly = Person.new('Polly Parker', 8)
+    rover = Person.new('Rover Henriette', 1)
+    sampson = Person.new('Sampson Edwards', 7)
+    seventh_flotilla = Flotilla.new({designation: 'Seventh Flotilla'})
+
+    odyssey.add_requirement({operations: 6})
+    odyssey.add_requirement({maintenance: 3})
+
+    kathy.add_specialty(:astrophysics)
+    kathy.add_specialty(:quantum_mechanics)
+    polly.add_specialty(:operations)
+    polly.add_specialty(:maintenance)
+    rover.add_specialty(:operations)
+    rover.add_specialty(:maintenance)
+    sampson.add_specialty(:astrophysics)
+    sampson.add_specialty(:quantum_mechanics)
+
+    seventh_flotilla.add_personnel(kathy)
+    seventh_flotilla.add_personnel(polly)
+    seventh_flotilla.add_personnel(rover)  seventh_flotilla.add_personnel(sampson)
+
+    expect(seventh_flotilla.personnel_by_ship).to eq({daedalus: [kathy, sampson], odyssey: [polly]})
   end
 end
